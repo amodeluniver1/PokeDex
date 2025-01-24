@@ -1,20 +1,19 @@
 
-import './App.css'
-import Pokemons from './Components/pokemons'
+import './App.css';
+import Pokemons from './Components/Pokemons';
 
 function App() {
-
-  return(
+  return (
     <div>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg" alt="poke_logo" />
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg"
+        alt="poke_logo"
+        className="logo"
+      />
       <br />
-      <Pokemons></Pokemons>
-  s
+      <Pokemons />
     </div>
-    
-  )
-    
-
+  );
 }
 
-export default App
+export default App;

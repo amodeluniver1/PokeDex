@@ -1,51 +1,44 @@
-import { useEffect, useState } from "react"
-import './pokemons.css'
 
-function Pokemons(){
+import { useEffect, useState } from "react";
+import SearchBar from "./SearchBar";
+import PokemonCard from "./PokemonCard";
+import './pokemons.css';
 
-const url = 'https://pokeapi.co/api/v2/pokemon?limit=151'
-const [search, setSearch] = useState('')
-const [pokemon, setPokemon] = useState([])
+function Pokemons() {
+  const url = "https://pokeapi.co/api/v2/pokemon?limit=151";
+  const [search, setSearch] = useState("");
+  const [pokemon, setPokemon] = useState([]);
 
-const fetchPokemon = async () => {
-  const response = await fetch(url)
-  const data = await response.json()
-  console.log(data)
-  setPokemon(data.results)
+  const fetchPokemon = async () => {
+    const response = await fetch(url);
+    const data = await response.json();
+    setPokemon(data.results);
+  };
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const filteredPokemon = !search
+    ? pokemon
+    : pokemon.filter((poke) =>
+        poke.name.toLowerCase().includes(search.toLowerCase())
+      );
+
+  useEffect(() => {
+    fetchPokemon();
+  }, []);
+
+  return (
+    <div>
+      <SearchBar search={search} onChange={handleSearch} />
+      <section className="pokemon-container">
+        {filteredPokemon.map((poke) => (
+          <PokemonCard key={poke.name} name={poke.name} url={poke.url} />
+        ))}
+      </section>
+    </div>
+  );
 }
 
-const searcher = (e) => {
-  setSearch(e.target.value)
-}
-
-const results = !search ? pokemon : pokemon.filter(poke => poke.name.toLowerCase().includes(search.toLowerCase()) )
-
-useEffect(() => {
-  fetchPokemon()
-} , [])
-
-const getPokemonId = (url) => {
-  const urlParts = url.split('/')
-  return urlParts[urlParts.length - 2]
-}
-
-return (
-  <div><input value={search} onChange={searcher} type="text" placeholder="Enter a Pokemon name"/>
-
-  <section className='pokemon-container'>
-    {results.map((poke) => {
-      return (
-        <div key={getPokemonId(poke.url)} className="pokemon_card">
-          <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${getPokemonId(poke.url)}.png`} alt="poke.url" />
-          <h3>{poke.name.toUpperCase()}</h3>
-
-        </div>
-      )
-    })}
-  </section>
-  </div>
-);
-    
-}
-
-export default Pokemons
+export default Pokemons;
